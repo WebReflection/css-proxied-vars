@@ -19,3 +19,7 @@ Object.assign(htmlCSSVars, {
   color: 'gray'
 });
 ```
+
+### Not compatible with IE
+
+If you are targeting this obsolete browser, forget about this module 👍
