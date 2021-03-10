@@ -1,14 +1,16 @@
-import uhyphen from 'uhyphen';
+/*! (c) Andrea Giammarchi */
+
+import {t} from './t.js';
 
 class CSSVarsHandler {
   constructor(_) {
     this._ = _;
   }
   get(_, name) {
-    return this._.getPropertyValue('--' + uhyphen(name));
+    return this._.getPropertyValue(t(name));
   }
   set(target, name, value) {
-    target.style.setProperty('--' + uhyphen(name), value);
+    target.style.setProperty(t(name), value);
     return true;
   }
 }

@@ -1,18 +1,22 @@
 var cssProxiedVars = (function (exports) {
                              'use strict';
 
-                             var uhyphen = camel => camel.replace(/(([A-Z0-9])([A-Z0-9][a-z]))|(([a-z])([A-Z]))/g, '$2$5-$3$6')
+                             var hyphe = camel => camel.replace(/(([A-Z0-9])([A-Z0-9][a-z]))|(([a-z])([A-Z]))/g, '$2$5-$3$6')
                                                           .toLowerCase();
+
+                             const t = n => n[0] === '-' ? n : ('--' + hyphe(n));
+
+                             /*! (c) Andrea Giammarchi */
 
                              class CSSVarsHandler {
                                constructor(_) {
                                  this._ = _;
                                }
                                get(_, name) {
-                                 return this._.getPropertyValue('--' + uhyphen(name));
+                                 return this._.getPropertyValue(t(name));
                                }
                                set(target, name, value) {
-                                 target.style.setProperty('--' + uhyphen(name), value);
+                                 target.style.setProperty(t(name), value);
                                  return true;
                                }
                              }

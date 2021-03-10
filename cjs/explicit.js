@@ -1,17 +1,17 @@
 'use strict';
 /*! (c) Andrea Giammarchi */
 
-const {t} = require('./t.js');
+
 
 class CSSVarsHandler {
   constructor(_) {
     this._ = _;
   }
   get(_, name) {
-    return this._.getPropertyValue(t(name));
+    return this._.getPropertyValue(name);
   }
   set(target, name, value) {
-    target.style.setProperty(t(name), value);
+    target.style.setProperty(name, value);
     return true;
   }
 }
