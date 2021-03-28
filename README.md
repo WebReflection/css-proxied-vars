@@ -1,5 +1,9 @@
 # css-proxied-vars
 
+[![Build Status](https://travis-ci.com/WebReflection/css-proxied-vars.svg?branch=main)](https://travis-ci.com/WebReflection/css-proxied-vars) [![Coverage Status](https://coveralls.io/repos/github/WebReflection/css-proxied-vars/badge.svg?branch=main)](https://coveralls.io/github/WebReflection/css-proxied-vars?branch=main)
+
+<sup>**Social Media Photo by [Michael Dziedzic](https://unsplash.com/@lazycreekimages) on [Unsplash](https://unsplash.com/)**</sup>
+
 The easiest way to set, read, or update, CSS variables per each element.
 
 **[Live Demo](https://codepen.io/WebReflection/pen/GRNXrEK?editors=0010)**
