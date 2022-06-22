@@ -7,11 +7,21 @@ class CSSVarsHandler {
   constructor(_) {
     this._ = _;
   }
+  deleteProperty(style, name) {
+    style.removeProperty(name);
+    return true;
+  }
   get(_, name) {
     return this._.getPropertyValue(name);
   }
-  set(target, name, value) {
-    target.style.setProperty(name, value);
+  has(style, name) {
+    return [...style].includes(name);
+  }
+  ownKeys(style) {
+    return [...style];
+  }
+  set(style, name, value) {
+    style.setProperty(name, value);
     return true;
   }
 }
@@ -21,7 +31,7 @@ class CSSVarsHandler {
  * @param {string?} pseudo The optional pseudo element to read variables from.
  */
 module.exports = (target, pseudo = null) => new Proxy(
-  target,
+  target.style,
   new CSSVarsHandler(
     getComputedStyle(target, pseudo)
   )

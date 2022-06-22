@@ -12,11 +12,21 @@ var cssProxiedVars = (function (exports) {
                                constructor(_) {
                                  this._ = _;
                                }
+                               deleteProperty(style, name) {
+                                 style.removeProperty(t(name));
+                                 return true;
+                               }
                                get(_, name) {
                                  return this._.getPropertyValue(t(name));
                                }
-                               set(target, name, value) {
-                                 target.style.setProperty(t(name), value);
+                               has(style, name) {
+                                 return [...style].includes(t(name));
+                               }
+                               ownKeys(style) {
+                                 return [...style];
+                               }
+                               set(style, name, value) {
+                                 style.setProperty(t(name), value);
                                  return true;
                                }
                              }
@@ -26,14 +36,14 @@ var cssProxiedVars = (function (exports) {
                               * @param {string?} pseudo The optional pseudo element to read variables from.
                               */
                              var index = (target, pseudo = null) => new Proxy(
-                               target,
+                               target.style,
                                new CSSVarsHandler(
                                  getComputedStyle(target, pseudo)
                                )
                              );
 
-                             exports.default = index;
+                             exports["default"] = index;
 
                              return exports;
 
-}({}).default);
+})({}).default;
