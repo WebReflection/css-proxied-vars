@@ -4,16 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>css-proxied-vars</title>
+  <style>
+    html {
+      background-color: var(--background-color, transparent);
+    }
+  </style>
   <script type="module">
-  import(
-    /^(?:localhost|[::1]|127(?:.d+){3})$/.test(location.hostname) ?
-    '../esm/index.js' :
-    'https://unpkg.com/css-proxied-vars?module'
-  )
-  .then((module) => {
-    console.log(module);
-  });
+    import cssVars from '../index.js';
+    const vars = cssVars(document.documentElement);
+    vars['color'] = 'blue';
+
+    console.assert('--background-color' in vars === false);
+    vars['--background-color'] = 'green';
+
+    console.assert('--background-color' in vars);
+    console.log(Reflect.ownKeys(vars));
+    console.log(Object.keys(vars));
+
+    for (const [key, value] of vars)
+      console.log({ key, value });
   </script>
 </head>
-<body></body>
+<body>
+  OK
+</body>
 </html>

@@ -1,2 +1,0 @@
-const e=e=>"-"===e[0]?e:"--"+e.replace(/(([A-Z0-9])([A-Z0-9][a-z]))|(([a-z])([A-Z]))/g,"$2$5-$3$6").toLowerCase()
-/*! (c) Andrea Giammarchi */;class r{constructor(e){this._=e}deleteProperty(r,t){return r.removeProperty(e(t)),!0}get(r,t){return this._.getPropertyValue(e(t))}has(r,t){return[...r].includes(e(t))}ownKeys(e){return[...e]}set(r,t,o){return r.setProperty(e(t),o),!0}}var t=(e,t=null)=>new Proxy(e.style,new r(getComputedStyle(e,t)));export{t as default};

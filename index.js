@@ -1,49 +1,104 @@
-var cssProxiedVars = (function (exports) {
-                             'use strict';
+const descriptor = value => ({
+  value,
+  configurable: true,
+  enumerable: true,
+  writable: true
+});
 
-                             var hyphe = camel => camel.replace(/(([A-Z0-9])([A-Z0-9][a-z]))|(([a-z])([A-Z]))/g, '$2$5-$3$6')
-                                                          .toLowerCase();
+class Handler {
+  /** @type {CSSStyleDeclaration} */
+  #computed;
 
-                             const t = n => n[0] === '-' ? n : ('--' + hyphe(n));
+  /**
+   * @param {string} name
+   * @returns 
+   */
+  #value(name) {
+    return this.#computed.getPropertyValue(name);
+  }
 
-                             /*! (c) Andrea Giammarchi */
+  /**
+   * @yields {[string, string]}
+   * @param {CSSStyleDeclaration} style
+   */
+  *#iterator(style) {
+    for (const name of style)
+      yield [name, this.#value(name)];
+  }
 
-                             class CSSVarsHandler {
-                               constructor(_) {
-                                 this._ = _;
-                               }
-                               deleteProperty(style, name) {
-                                 style.removeProperty(t(name));
-                                 return true;
-                               }
-                               get(_, name) {
-                                 return this._.getPropertyValue(t(name));
-                               }
-                               has(style, name) {
-                                 return [...style].includes(t(name));
-                               }
-                               ownKeys(style) {
-                                 return [...style];
-                               }
-                               set(style, name, value) {
-                                 style.setProperty(t(name), value);
-                                 return true;
-                               }
-                             }
+  /**
+   * @param {CSSStyleDeclaration} computed
+   */
+  constructor(computed) {
+    this.#computed = computed;
+  }
 
-                             /**
-                              * @param {Element} target The element where CSS variables will be set.
-                              * @param {string?} pseudo The optional pseudo element to read variables from.
-                              */
-                             var index = (target, pseudo = null) => new Proxy(
-                               target.style,
-                               new CSSVarsHandler(
-                                 getComputedStyle(target, pseudo)
-                               )
-                             );
+  /**
+   * @param {CSSStyleDeclaration} style
+   * @param {string} name
+   * @returns {boolean}
+   */
+  deleteProperty(style, name) {
+    style.removeProperty(name);
+    return true;
+  }
 
-                             exports["default"] = index;
+  /**
+   * @param {CSSStyleDeclaration} _
+   * @param {string | symbol} name
+   * @returns {PropertyDescriptor?}
+   */
+  getOwnPropertyDescriptor(_, name) {
+    const value = this.#value(name);
+    return value ? descriptor(value) : void 0;
+  }
 
-                             return exports;
+  /**
+   * @param {CSSStyleDeclaration} style
+   * @param {string | symbol} name
+   * @returns {string}
+   */
+  get(style, name) {
+    return name === Symbol.iterator ?
+      this.#iterator.bind(this, style) :
+      this.#value(name);
+  }
 
-})({}).default;
+  /**
+   * @param {CSSStyleDeclaration} style
+   * @param {string} name
+   * @returns {boolean}
+   */
+  has(style, name) {
+    return [...style].includes(name);
+  }
+
+  /**
+   * @param {CSSStyleDeclaration} style
+   * @returns {string[]}
+   */
+  ownKeys(style) {
+    return [...style];
+  }
+
+  /**
+   * @param {CSSStyleDeclaration} style
+   * @param {string} name
+   * @param {string} value
+   * @returns {boolean}
+   */
+  set(style, name, value) {
+    style.setProperty(name, value);
+    return true;
+  }
+}
+
+/**
+ * @param {Element} target
+ * @param {string} [pseudo]
+ * @returns {CSSStyleDeclaration}
+ */
+export default (target, pseudo = null) => new Proxy(
+  /** @type {CSSStyleDeclaration} */(target.style),
+  new Handler(getComputedStyle(target, pseudo))
+);
