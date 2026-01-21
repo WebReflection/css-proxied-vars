@@ -1,6 +1,6 @@
 {
   "name": "css-proxied-vars",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "The easiest way to set, read, or update, CSS variables per each element",
   "main": "./index.js",
   "module": "./index.js",
