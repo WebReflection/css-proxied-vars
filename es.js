@@ -1,2 +1,0 @@
-self.cssProxiedVars=function(e){"use strict";const r=e=>"-"===e[0]?e:"--"+e.replace(/(([A-Z0-9])([A-Z0-9][a-z]))|(([a-z])([A-Z]))/g,"$2$5-$3$6").toLowerCase()
-/*! (c) Andrea Giammarchi */;class t{constructor(e){this._=e}deleteProperty(e,t){return e.removeProperty(r(t)),!0}get(e,t){return this._.getPropertyValue(r(t))}has(e,t){return[...e].includes(r(t))}ownKeys(e){return[...e]}set(e,t,s){return e.setProperty(r(t),s),!0}}return e.default=(e,r=null)=>new Proxy(e.style,new t(getComputedStyle(e,r))),e}({}).default;
